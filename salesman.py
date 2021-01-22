@@ -2,6 +2,7 @@ from search import *
 
 import sys
 import random
+import tsp
 
 import os.path
 
@@ -42,24 +43,28 @@ class TravellingSalesmanProblem(Problem):
 		return random.sample(range(1, self.n), 2)
 
 	
+	def inverse_action(self, action):
+		return [action[1], action[0]]
+
+	
 	def result(self, state, action):
 		a, b = action
 
-		new_state = state.copy()
+		new_state = state
 		new_state.path[a], new_state.path[b] = new_state.path[b], new_state.path[a]
 
 		# This edge cases must be accounted for so that each is considered only one time
 		if a - 1 == b:
-			new_state.score += self.points_distance(new_state.path[a], new_state.path[a+1]) - self.points_distance(state.path[a], state.path[a+1])
-			new_state.score += self.points_distance(new_state.path[b-1], new_state.path[b]) - self.points_distance(state.path[b-1], state.path[b])
+			new_state.score += self.points_distance(new_state.path[a], new_state.path[a+1]) - self.points_distance(new_state.path[b], new_state.path[a+1])
+			new_state.score += self.points_distance(new_state.path[b-1], new_state.path[b]) - self.points_distance(new_state.path[b-1], new_state.path[a])
 		elif a + 1 == b:
-			new_state.score += self.points_distance(new_state.path[a-1], new_state.path[a]) - self.points_distance(state.path[a-1], state.path[a])
-			new_state.score += self.points_distance(new_state.path[b], new_state.path[b+1]) - self.points_distance(state.path[b], state.path[b+1])
+			new_state.score += self.points_distance(new_state.path[a-1], new_state.path[a]) - self.points_distance(new_state.path[a-1], new_state.path[b])
+			new_state.score += self.points_distance(new_state.path[b], new_state.path[b+1]) - self.points_distance(new_state.path[a], new_state.path[b+1])
 		else:
-			new_state.score += self.points_distance(new_state.path[a], new_state.path[a+1]) - self.points_distance(state.path[a], state.path[a+1])
-			new_state.score += self.points_distance(new_state.path[b-1], new_state.path[b]) - self.points_distance(state.path[b-1], state.path[b])
-			new_state.score += self.points_distance(new_state.path[a-1], new_state.path[a]) - self.points_distance(state.path[a-1], state.path[a])
-			new_state.score += self.points_distance(new_state.path[b], new_state.path[b+1]) - self.points_distance(state.path[b], state.path[b+1])
+			new_state.score += self.points_distance(new_state.path[a], new_state.path[a+1]) - self.points_distance(new_state.path[b], new_state.path[a+1])
+			new_state.score += self.points_distance(new_state.path[b-1], new_state.path[b]) - self.points_distance(new_state.path[b-1], new_state.path[a])
+			new_state.score += self.points_distance(new_state.path[a-1], new_state.path[a]) - self.points_distance(new_state.path[a-1], new_state.path[b])
+			new_state.score += self.points_distance(new_state.path[b], new_state.path[b+1]) - self.points_distance(new_state.path[a], new_state.path[b+1])
 
 		return new_state
 

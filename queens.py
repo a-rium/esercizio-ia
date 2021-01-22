@@ -52,6 +52,10 @@ class QueensProblem(Problem):
 		return random.sample(range(self.n), 2)
 
 
+	def inverse_action(self, action):
+		return [action[1], action[0]]
+
+
 	def queens_enter_the_diag(self, diag, i):
 		""" 
 		Given the fact that a queen has entered the i-th diagonal (the diagonals are specified by diag), 
@@ -76,7 +80,7 @@ class QueensProblem(Problem):
 
 	def result(self, state, action):
 		i, j = action
-		new_state = state.copy()
+		new_state = state
 		new_state.queens[i], new_state.queens[j] = new_state.queens[j], new_state.queens[i]
 		new_state.score += self.queens_exit_the_diag(new_state.leftdiag, self.n - 1 - i + new_state.queens[j])
 		new_state.score += self.queens_enter_the_diag(new_state.leftdiag, self.n - 1 - i + new_state.queens[i])

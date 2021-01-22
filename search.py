@@ -10,6 +10,9 @@ class Problem(object):
 	def random_action(self, state):
 		pass
 
+	def inverse_action(self, action):
+		pass
+
 	def result(self, state, action):
 		pass
 	
@@ -62,6 +65,9 @@ def simulated_annealing(problem, schedule, maxiter=0):
 				stats["Random swaps"] += 1
 				if gain > 0:
 					stats["Local optimum reached since"] = t
+			else:
+				action = problem.inverse_action(action)
+				state = problem.result(new_state, action)
 		if t == maxiter:
 			break
 

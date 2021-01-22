@@ -62,6 +62,10 @@ class MagicSquareProblem(Problem):
 		return random.sample(range(0, self.n**2), 2)
 
 
+	def inverse_action(self, action):
+		return [action[1], action[0]]
+
+
 	def result(self, state, action):
 		a, b = action
 		ar, ac = a // self.n, a % self.n
@@ -71,7 +75,7 @@ class MagicSquareProblem(Problem):
 		bn = state.square[b]
 		diff = an - bn
 
-		new_state = state.copy()
+		new_state = state
 		new_state.square[a], new_state.square[b] = state.square[b], state.square[a]
 
 		new_state.score -= abs(self.magic - new_state.rows[ar])
