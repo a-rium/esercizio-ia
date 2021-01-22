@@ -2,7 +2,6 @@ from search import *
 
 import sys
 import random
-import tsp
 
 import os.path
 
